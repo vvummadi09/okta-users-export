@@ -16,16 +16,19 @@ def main():
         "Authorization": f"SSWS {TOKEN}",
         "Accept": "application/json",
     }
-    response = requests.get(url, headers=headers, timeout=10)
+    response = requests.get(url, headers=headers, timeout=10,params= {"limit":2})
     print("Status:", response.status_code)
     response.raise_for_status()
+    print("Link:", response.headers.get("Link"))
+    next_url = response.links.get("next", {}).get("url")
+    print("Next:", next_url)
 
     users = response.json()
     # TODO: loop over users and print each one's status and login
 
     for user in users:
-        print(f"Status :  {user["status"]}")
-        print(f"Login :  {user["profile"]["login"]}")
+        print(f"Status :  {user['status']}")
+        print(f"Login :  {user['profile']['login']}")
 
 
 
